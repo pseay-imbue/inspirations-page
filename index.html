@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Minds Inspiration Explorer</title>
+
+    <!-- CSS will be added later -->
+    <style>
+/* ==========================================================
+   RESET
+========================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0d1117;
+    color: #e6edf3;
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* ==========================================================
+   VARIABLES
+========================================================== */
+
+:root {
+
+    --bg: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-hover: #1f2937;
+
+    --border: #30363d;
+
+    --text: #e6edf3;
+    --muted: #8b949e;
+
+    --accent: #2f81f7;
+    --accent-hover: #4493f8;
+
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+
+    --shadow:
+        0 10px 35px rgba(0,0,0,.35);
+
+    --radius: 14px;
+
+    --transition:
+        180ms ease;
+
+}
+
+/* ==========================================================
+   LINKS
+========================================================== */
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.app-header {
+
+    position: sticky;
+    top: 0;
+    z-index: 500;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    padding: 20px 32px;
+
+    background: rgba(13,17,23,.92);
+
+    backdrop-filter: blur(16px);
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+.header-left h1 {
+
+    margin: 0;
+
+    font-size: 2rem;
+    font-weight: 700;
+
+}
+
+.subtitle {
+
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: .95rem;
+
+}
+
+.subtitle code {
+
+    color: var(--accent);
+
+    background: rgba(47,129,247,.12);
+
+    padding: 2px 8px;
+
+    border-radius: 999px;
+
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+button {
+
+    cursor: pointer;
+
+    border: none;
+
+    border-radius: 10px;
+
+    transition: all .18s ease;
+
+    background: var(--accent);
+
+    color: white;
+
+    padding: 11px 18px;
+
+    font-weight: 600;
+
+}
+
+button:hover {
+
+    background: var(--accent-hover);
+
+    transform: translateY(-2px);
+
+}
+
+button:active {
+
+    transform: translateY(0);
+
+}
+
+button.secondary {
+
+    background: var(--bg-secondary);
+
+    border: 1px solid var(--border);
+
+}
+
+button.secondary:hover {
+
+    background: var(--bg-hover);
+
+}
+
+button:disabled {
+
+    opacity: .5;
+
+    cursor: default;
+
+    transform: none;
+
+}
+
+/* ==========================================================
+   TOOLBAR
+========================================================== */
+
+.toolbar {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    align-items: center;
+
+    padding: 22px 32px;
+
+}
+
+.toolbar-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+.search-group {
+
+    flex: 1;
+
+    min-width: 280px;
+
+}
+
+.sort-group {
+
+    width: 240px;
+
+}
+
+.stats-group {
+
+    margin-left: auto;
+
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 22px;
+
+    align-items: flex-end;
+
+}
+
+/* ==========================================================
+   LABELS
+========================================================== */
+
+label {
+
+    color: var(--muted);
+
+    font-size: .85rem;
+
+    font-weight: 600;
+
+    letter-spacing: .04em;
+
+    text-transform: uppercase;
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+input,
+select {
+
+    background: var(--bg-secondary);
+
+    border: 1px solid var(--border);
+
+    color: var(--text);
+
+    border-radius: 10px;
+
+    padding: 12px 14px;
+
+    outline: none;
+
+    transition: all .18s ease;
+
+}
+
+input:focus,
+select:focus {
+
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px rgba(47,129,247,.18);
+
+}
+
+input::placeholder {
+
+    color: #6e7681;
+
+}
+
+/* ==========================================================
+   STATS
+========================================================== */
+
+.stat {
+
+    color: var(--muted);
+
+    font-size: .95rem;
+
+}
+
+.stat span {
+
+    color: white;
+
+    font-weight: 700;
+
+    margin-left: 6px;
+
+}
+
+/* ==========================================================
+   STATUS BAR
+========================================================== */
+
+#statusBar {
+
+    padding: 0 32px 20px;
+
+}
+
+#statusMessage {
+
+    color: var(--muted);
+
+    font-size: .95rem;
+
+}
+
+/* ==========================================================
+   PROGRESS
+========================================================== */
+
+.progress-wrapper {
+
+    padding: 0 32px 22px;
+
+}
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 8px;
+
+    background: var(--bg-secondary);
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+
+}
+
+.progress-fill {
+
+    width: 0%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--accent),
+            #58a6ff
+        );
+
+    transition:
+        width .25s ease;
+
+}
+
+.progress-text {
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+}
+
+/* ==========================================================
+   MAIN
+========================================================== */
+
+main {
+
+    padding: 0 28px 60px;
+
+}
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+.footer {
+
+    border-top: 1px solid var(--border);
+
+    padding: 28px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar {
+
+    width: 12px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background: var(--bg);
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: #30363d;
+
+    border-radius: 999px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: #484f58;
+
+}
+
+/* Firefox */
+
+* {
+
+    scrollbar-width: thin;
+
+    scrollbar-color: #484f58 var(--bg);
+
+}
+
+/* ==========================================================
+   REPOSITORY GRID
+========================================================== */
+
+.repo-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(320px, 1fr)
+        );
+
+    gap: 24px;
+
+    align-items: start;
+
+}
+
+/* ==========================================================
+   CARD
+========================================================== */
+
+.repo-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: var(--bg-secondary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+
+    box-shadow:
+        0 0 0 rgba(0,0,0,0);
+
+    cursor: pointer;
+
+    position: relative;
+
+    animation:
+        cardAppear .35s ease;
+
+}
+
+.repo-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(88,166,255,.45);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.45);
+
+}
+
+.repo-card:active {
+
+    transform:
+        translateY(-2px);
+
+}
+
+/* ==========================================================
+   CARD HEADER PREVIEW
+========================================================== */
+
+.repo-preview {
+
+    height: 180px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #161b22,
+            #0d1117
+        );
+
+    border-bottom:
+        1px solid var(--border);
+
+    overflow: hidden;
+
+    position: relative;
+
+}
+
+.repo-preview::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        radial-gradient(
+
+            circle at center,
+
+            rgba(88,166,255,.08),
+
+            transparent 70%
+
+        );
+
+    pointer-events: none;
+
+}
+
+.svg-container {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 22px;
+
+}
+
+.repo-svg {
+
+    max-width: 100%;
+
+    max-height: 130px;
+
+    object-fit: contain;
+
+    transition:
+        transform .25s ease;
+
+}
+
+.repo-card:hover .repo-svg {
+
+    transform:
+        scale(1.05);
+
+}
+
+/* ==========================================================
+   SVG PLACEHOLDER
+========================================================== */
+
+.repo-placeholder {
+
+    width: 96px;
+
+    height: 96px;
+
+    border-radius: 22px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #22272e,
+            #30363d
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 42px;
+
+    color: var(--muted);
+
+    user-select: none;
+
+}
+
+/* ==========================================================
+   CONTENT
+========================================================== */
+
+.repo-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    padding: 20px;
+
+    flex: 1;
+
+}
+
+.repo-header {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+.repo-name {
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 1.2rem;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    word-break: break-word;
+
+}
+
+.repo-owner {
+
+    color: var(--accent);
+
+    font-size: .92rem;
+
+    font-weight: 600;
+
+}
+
+/* ==========================================================
+   DESCRIPTION
+========================================================== */
+
+.repo-description {
+
+    color: var(--muted);
+
+    font-size: .94rem;
+
+    line-height: 1.55;
+
+    flex: 1;
+
+    overflow-wrap: break-word;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 4;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+}
+
+/* ==========================================================
+   META
+========================================================== */
+
+.repo-meta {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    padding-top: 6px;
+
+}
+
+.meta-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: .88rem;
+
+    color: var(--muted);
+
+}
+
+.star-count {
+
+    color: var(--yellow);
+
+    font-weight: 700;
+
+}
+
+.updated-date {
+
+    color: #c9d1d9;
+
+    font-weight: 600;
+
+}
+
+/* ==========================================================
+   ACTIONS
+========================================================== */
+
+.repo-actions {
+
+    display: flex;
+
+    gap: 12px;
+
+    padding: 18px 20px;
+
+    border-top:
+        1px solid var(--border);
+
+    background:
+        rgba(255,255,255,.015);
+
+}
+
+.repo-actions button {
+
+    flex: 1;
+
+}
+
+.open-button {
+
+    background:
+        var(--accent);
+
+}
+
+.open-button:hover {
+
+    background:
+        var(--accent-hover);
+
+}
+
+.homepage-button {
+
+    background:
+        transparent;
+
+    border:
+        1px solid var(--border);
+
+    color:
+        white;
+
+}
+
+.homepage-button:hover {
+
+    background:
+        var(--bg-hover);
+
+}
+
+.homepage-button.hidden {
+
+    display: none;
+
+}
+
+/* ==========================================================
+   CARD BADGE
+========================================================== */
+
+.repo-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    right: 0;
+
+    height: 3px;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            var(--accent),
+
+            #58a6ff,
+
+            #79c0ff
+
+        );
+
+    opacity: 0;
+
+    transition:
+        opacity .18s ease;
+
+}
+
+.repo-card:hover::before {
+
+    opacity: 1;
+
+}
+
+/* ==========================================================
+   COPY FLASH
+========================================================== */
+
+.repo-card.copied {
+
+    border-color:
+        var(--green);
+
+    box-shadow:
+
+        0 0 0 2px rgba(63,185,80,.25),
+
+        0 18px 40px rgba(0,0,0,.4);
+
+}
+
+/* ==========================================================
+   LOADING STATE
+========================================================== */
+
+.repo-card.loading {
+
+    pointer-events: none;
+
+    opacity: .7;
+
+}
+
+/* ==========================================================
+   EMPTY RESULTS
+========================================================== */
+
+.empty-state {
+
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 80px 30px;
+
+    color: var(--muted);
+
+}
+
+.empty-state h2 {
+
+    color: white;
+
+    margin-bottom: 10px;
+
+}
+
+.empty-state p {
+
+    margin: 0;
+
+}
+
+/* ==========================================================
+   CARD APPEAR ANIMATION
+========================================================== */
+
+@keyframes cardAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(24px)
+            scale(.98);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+/* ==========================================================
+   HOVER GLOW
+========================================================== */
+
+.repo-card:hover {
+
+    background:
+
+        linear-gradient(
+
+            180deg,
+
+            #1a2029,
+
+            #161b22
+
+        );
+
+}
+
+/* ==========================================================
+   FOCUS
+========================================================== */
+
+.repo-card:focus-within {
+
+    outline: 2px solid var(--accent);
+
+    outline-offset: 2px;
+
+}
+
+/* ==========================================================
+   IMAGE FADE-IN
+========================================================== */
+
+.repo-svg {
+
+    opacity: 0;
+
+    transition:
+
+        opacity .3s ease,
+
+        transform .25s ease;
+
+}
+
+.repo-svg.loaded {
+
+    opacity: 1;
+
+}
+
+/* ==========================================================
+   SKELETON LOADING
+========================================================== */
+
+.skeleton-card {
+
+    pointer-events: none;
+
+    overflow: hidden;
+
+}
+
+.skeleton {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #21262d;
+
+    border-radius: 10px;
+
+}
+
+.skeleton::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    transform: translateX(-100%);
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.08),
+            transparent
+        );
+
+    animation: skeletonShimmer 1.4s infinite;
+
+}
+
+.skeleton-image {
+
+    height: 180px;
+
+    border-radius: 0;
+
+}
+
+.skeleton-title {
+
+    height: 24px;
+
+    margin: 20px;
+
+    margin-bottom: 12px;
+
+}
+
+.skeleton-owner {
+
+    height: 16px;
+
+    width: 40%;
+
+    margin: 0 20px 18px;
+
+}
+
+.skeleton-text {
+
+    height: 14px;
+
+    margin: 0 20px 10px;
+
+}
+
+.skeleton-text.short {
+
+    width: 60%;
+
+    margin-bottom: 18px;
+
+}
+
+.skeleton-footer {
+
+    height: 42px;
+
+    margin: 18px 20px 20px;
+
+}
+
+@keyframes skeletonShimmer {
+
+    to {
+
+        transform: translateX(100%);
+
+    }
+
+}
+
+/* ==========================================================
+   TOAST
+========================================================== */
+
+.toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 32px;
+
+    transform: translate(-50%, 100px);
+
+    background: rgba(22,27,34,.96);
+
+    color: white;
+
+    padding: 14px 22px;
+
+    border-radius: 999px;
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+
+        opacity .25s ease,
+
+        transform .25s ease;
+
+    z-index: 3000;
+
+    font-weight: 600;
+
+}
+
+.toast.show {
+
+    opacity: 1;
+
+    transform: translate(-50%, 0);
+
+}
+
+/* ==========================================================
+   HIDDEN
+========================================================== */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+/* ==========================================================
+   FADE-IN
+========================================================== */
+
+.fade-in {
+
+    animation: fadeIn .3s ease;
+
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+/* ==========================================================
+   SLIDE-UP
+========================================================== */
+
+.slide-up {
+
+    animation: slideUp .35s ease;
+
+}
+
+@keyframes slideUp {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(18px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+   SPINNER
+========================================================== */
+
+.spinner {
+
+    width: 28px;
+
+    height: 28px;
+
+    border-radius: 50%;
+
+    border: 3px solid #30363d;
+
+    border-top-color: var(--accent);
+
+    animation: spin .8s linear infinite;
+
+}
+
+@keyframes spin {
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+/* ==========================================================
+   PROGRESS STATES
+========================================================== */
+
+.progress-fill.complete {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--green),
+            #56d364
+        );
+
+}
+
+.progress-fill.error {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--red),
+            #ff7b72
+        );
+
+}
+
+/* ==========================================================
+   STATUS COLORS
+========================================================== */
+
+.status-success {
+
+    color: var(--green);
+
+}
+
+.status-error {
+
+    color: var(--red);
+
+}
+
+.status-warning {
+
+    color: var(--yellow);
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 1100px) {
+
+    .toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .stats-group {
+
+        margin-left: 0;
+
+        justify-content: space-between;
+
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .app-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 18px;
+
+    }
+
+    .repo-grid {
+
+        grid-template-columns:
+
+            repeat(
+                auto-fill,
+                minmax(300px,1fr)
+            );
+
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .toolbar {
+
+        padding: 20px;
+
+    }
+
+    .progress-wrapper {
+
+        padding: 0 20px 20px;
+
+    }
+
+    #statusBar {
+
+        padding: 0 20px 20px;
+
+    }
+
+    main {
+
+        padding: 0 20px 40px;
+
+    }
+
+    .repo-actions {
+
+        flex-direction: column;
+
+    }
+
+    .stats-group {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .app-header {
+
+        padding: 18px;
+
+    }
+
+    .header-left h1 {
+
+        font-size: 1.5rem;
+
+    }
+
+    .subtitle {
+
+        font-size: .9rem;
+
+    }
+
+    .repo-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+
+    }
+
+    .repo-preview {
+
+        height: 150px;
+
+    }
+
+    .repo-content {
+
+        padding: 18px;
+
+    }
+
+    .repo-actions {
+
+        padding: 16px 18px;
+
+    }
+
+    dialog form {
+
+        padding: 22px;
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+
+        scroll-behavior: auto !important;
+
+    }
+
+}
+
+/* ==========================================================
+   UTILITIES
+========================================================== */
+
+.text-muted {
+
+    color: var(--muted);
+
+}
+
+.text-center {
+
+    text-align: center;
+
+}
+
+.mt-1 {
+
+    margin-top: 8px;
+
+}
+
+.mt-2 {
+
+    margin-top: 16px;
+
+}
+
+.mt-3 {
+
+    margin-top: 24px;
+
+}
+
+.mb-1 {
+
+    margin-bottom: 8px;
+
+}
+
+.mb-2 {
+
+    margin-bottom: 16px;
+
+}
+
+.mb-3 {
+
+    margin-bottom: 24px;
+
+}
+
+.flex {
+
+    display: flex;
+
+}
+
+.flex-center {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.gap-1 {
+
+    gap: 8px;
+
+}
+
+.gap-2 {
+
+    gap: 16px;
+
+}
+
+.w-100 {
+
+    width: 100%;
+
+}
+
+.no-select {
+
+    user-select: none;
+
+}
+
+.shadow {
+
+    box-shadow: var(--shadow);
+
+}
+
+.rounded {
+
+    border-radius: var(--radius);
+
+}
+    </style>
+</head>
+<body>
+
+    <!-- =======================================================
+         HEADER
+    ======================================================== -->
+    <header class="app-header">
+
+        <div class="header-left">
+            <h1>
+                Minds Inspiration Explorer
+            </h1>
+
+            <p class="subtitle">
+                Browse every GitHub repository tagged with
+                <code>minds-inspiration</code>
+            </p>
+        </div>
+
+    </header>
+
+    <!-- =======================================================
+         TOOLBAR
+    ======================================================== -->
+
+    <section class="toolbar">
+
+        <div class="toolbar-group search-group">
+
+            <label for="searchBox">
+                Search
+            </label>
+
+            <input
+                id="searchBox"
+                type="search"
+                placeholder="Search repositories..."
+                autocomplete="off">
+
+        </div>
+
+        <div class="toolbar-group sort-group">
+
+            <label for="sortSelect">
+                Sort
+            </label>
+
+            <select id="sortSelect">
+
+                <option value="stars">
+                    Stars
+                </option>
+
+                <option value="updated">
+                    Recently Updated
+                </option>
+
+                <option value="alpha">
+                    Alphabetical
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="toolbar-group stats-group">
+
+            <div class="stat">
+                Repositories:
+                <span id="repoCount">
+                    0
+                </span>
+            </div>
+
+            <div class="stat">
+                Loaded:
+                <span id="loadedCount">
+                    0
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =======================================================
+         PROGRESS BAR
+    ======================================================== -->
+
+    <section class="progress-wrapper">
+
+        <div class="progress-bar">
+
+            <div
+                id="progressFill"
+                class="progress-fill">
+            </div>
+
+        </div>
+
+        <div
+            id="progressText"
+            class="progress-text">
+            Waiting...
+        </div>
+
+    </section>
+
+    <!-- =======================================================
+         STATUS
+    ======================================================== -->
+
+    <section id="statusBar">
+
+        <div id="statusMessage">
+            Ready.
+        </div>
+
+    </section>
+
+    <!-- =======================================================
+         REPOSITORY GRID
+    ======================================================== -->
+
+    <main>
+
+        <section
+            id="repoGrid"
+            class="repo-grid">
+
+            <!-- Skeleton cards inserted here -->
+
+        </section>
+
+    </main>
+
+    <!-- =======================================================
+         CARD TEMPLATE
+    ======================================================== -->
+
+    <template id="repoCardTemplate">
+
+        <article class="repo-card">
+
+            <div class="repo-preview">
+
+                <div class="svg-container">
+
+                    <img
+                        class="repo-svg"
+                        loading="lazy"
+                        alt="Repository Preview">
+
+                </div>
+
+            </div>
+
+            <div class="repo-content">
+
+                <div class="repo-header">
+
+                    <h2 class="repo-name">
+                    </h2>
+
+                    <div class="repo-owner">
+                    </div>
+
+                </div>
+
+                <div class="repo-description">
+                </div>
+
+                <div class="repo-meta">
+
+                    <div class="meta-item stars">
+
+                        ★
+                        <span class="star-count"></span>
+
+                    </div>
+
+                    <div class="meta-item updated">
+
+                        Updated
+                        <span class="updated-date"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="repo-actions">
+
+                <button class="open-button">
+                    Open
+                </button>
+
+                <button class="homepage-button">
+                    Homepage
+                </button>
+
+            </div>
+
+        </article>
+
+    </template>
+
+    <!-- =======================================================
+         SKELETON TEMPLATE
+    ======================================================== -->
+
+    <template id="skeletonTemplate">
+
+        <article class="repo-card skeleton-card">
+
+            <div class="skeleton skeleton-image"></div>
+
+            <div class="skeleton skeleton-title"></div>
+
+            <div class="skeleton skeleton-owner"></div>
+
+            <div class="skeleton skeleton-text"></div>
+
+            <div class="skeleton skeleton-text short"></div>
+
+            <div class="skeleton skeleton-footer"></div>
+
+        </article>
+
+    </template>
+
+    <!-- =======================================================
+         TOAST
+    ======================================================== -->
+
+    <div
+        id="toast"
+        class="toast">
+
+        Copied!
+
+    </div>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================== -->
+
+    <footer class="footer">
+
+        <span>
+            Powered by the GitHub REST API
+        </span>
+
+    </footer>
+
+    <!-- =======================================================
+         JavaScript goes here later
+    ======================================================== -->
+
+    <script>
+// =============================================================
+// CONSTANTS
+// =============================================================
+
+const API_BASE = 'https://api.github.com';
+const TOPIC = 'minds-inspiration';
+const SVG_PREFERRED_NAMES = ['logo.svg', 'icon.svg', 'preview.svg', 'banner.svg'];
+const MAX_SUBDIR_DEPTH = 3;
+const MAX_CONTENTS_CALLS_PER_REPO = 20;
+const MAX_CONCURRENT_REQUESTS = 5;
+const SKELETON_COUNT = 8;
+
+// =============================================================
+// UTILITIES
+// =============================================================
+
+function debounce(fn, delay) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+}
+
+function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+}
+
+function trimTrailingZero(num) {
+    return (Math.round(num * 10) / 10).toString();
+}
+
+function formatCount(num) {
+    if (num >= 1_000_000) return `${trimTrailingZero(num / 1_000_000)}m`;
+    if (num >= 1000) return `${trimTrailingZero(num / 1000)}k`;
+    return String(num);
+}
+
+function formatRelativeDate(iso) {
+    const date = new Date(iso);
+    const diffSec = Math.floor((Date.now() - date.getTime()) / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHr = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHr / 24);
+
+    if (diffSec < 60) return 'just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    if (diffHr < 24) return `${diffHr}h ago`;
+    if (diffDay < 30) return `${diffDay}d ago`;
+
+    const diffMonth = Math.floor(diffDay / 30);
+    if (diffMonth < 12) return `${diffMonth}mo ago`;
+
+    const diffYear = Math.floor(diffDay / 365);
+    return `${diffYear}y ago`;
+}
+
+function hashStringToHue(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    return hash % 360;
+}
+
+function createPlaceholderSvg(repoName) {
+    const letter = escapeHtml((repoName[0] || '?').toUpperCase());
+    const hue = hashStringToHue(repoName);
+    return `
+        <svg viewBox="0 0 96 96" width="88" height="88" role="img" aria-label="${escapeHtml(repoName)} placeholder">
+            <rect width="96" height="96" rx="22" fill="hsl(${hue} 40% 20%)" />
+            <text x="48" y="62" font-family="Inter, ui-sans-serif, sans-serif" font-size="40"
+                  font-weight="700" fill="hsl(${hue} 70% 72%)" text-anchor="middle">${letter}</text>
+        </svg>
+    `;
+}
+
+// =============================================================
+// RATE LIMITER
+// A tiny concurrency gate so we never fire more than N requests
+// against the GitHub API at once, regardless of how many card
+// lookups fire in parallel from the IntersectionObserver.
+// =============================================================
+
+class RateLimiter {
+    constructor(maxConcurrent) {
+        this.maxConcurrent = maxConcurrent;
+        this.active = 0;
+        this.queue = [];
+    }
+
+    run(task) {
+        return new Promise((resolve, reject) => {
+            const attempt = () => {
+                this.active++;
+                task().then(
+                    (result) => { this._release(); resolve(result); },
+                    (err) => { this._release(); reject(err); }
+                );
+            };
+            if (this.active < this.maxConcurrent) attempt();
+            else this.queue.push(attempt);
+        });
+    }
+
+    _release() {
+        this.active--;
+        if (this.queue.length) this.queue.shift()();
+    }
+}
+
+// =============================================================
+// ERRORS
+// =============================================================
+
+class GitHubApiError extends Error {
+    constructor(message, { status = null, rateLimited = false } = {}) {
+        super(message);
+        this.name = 'GitHubApiError';
+        this.status = status;
+        this.rateLimited = rateLimited;
+    }
+}
+
+// =============================================================
+// GITHUB API CLIENT
+// Handles authentication, pagination, per-session caching,
+// request deduplication, concurrency limiting, and the SVG
+// discovery heuristic (root -> preferred names -> any -> BFS
+// subdirectories up to depth 3).
+// =============================================================
+
+class GitHubClient {
+    constructor() {
+        this.cache = new Map();      // url -> Promise<json|null>
+        this.svgCache = new Map();   // "owner/repo" -> Promise<entry|null>
+        this.limiter = new RateLimiter(MAX_CONCURRENT_REQUESTS);
+        this.rateLimitRemaining = null;
+        this.rateLimitReset = null;
+        this.rateLimited = false;
+        this.onRateLimit = null;
+    }
+
+    buildHeaders() {
+        return {
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+        };
+    }
+
+    // Deduplicated, cached, rate-limited fetch. Two callers asking for
+    // the same URL in the same session share a single in-flight request.
+    request(url) {
+        if (this.cache.has(url)) return this.cache.get(url);
+        const promise = this.limiter.run(() => this._fetch(url))
+            .catch((err) => { this.cache.delete(url); throw err; });
+        this.cache.set(url, promise);
+        return promise;
+    }
+
+    async _fetch(url) {
+        let response;
+        try {
+            response = await fetch(url, { headers: this.buildHeaders() });
+        } catch {
+            throw new GitHubApiError('Network error while contacting the GitHub API.');
+        }
+
+        const remaining = response.headers.get('x-ratelimit-remaining');
+        const reset = response.headers.get('x-ratelimit-reset');
+        if (remaining !== null) this.rateLimitRemaining = Number(remaining);
+        if (reset !== null) this.rateLimitReset = Number(reset);
+
+        if (response.status === 404) return null;
+
+        if (!response.ok) {
+            const isRateLimited = response.status === 403 && this.rateLimitRemaining === 0;
+            if (isRateLimited && !this.rateLimited) {
+                this.rateLimited = true;
+                this.onRateLimit?.(this.rateLimitReset);
+            }
+            let message = `GitHub API responded with ${response.status}`;
+            try {
+                const body = await response.json();
+                if (body?.message) message = body.message;
+            } catch { /* body wasn't JSON, keep default message */ }
+            throw new GitHubApiError(message, { status: response.status, rateLimited: isRateLimited });
+        }
+
+        return response.json();
+    }
+
+    // Follows pagination until every repository tagged with `topic`
+    // has been retrieved (GitHub search caps at 1000 results / topic).
+    async searchRepositoriesByTopic(topic, onProgress) {
+        const items = [];
+        let page = 1;
+        const perPage = 100;
+        let totalCount = 0;
+
+        while (true) {
+            const url = `${API_BASE}/search/repositories?q=${encodeURIComponent('topic:' + topic)}&per_page=${perPage}&page=${page}`;
+            const data = await this.request(url);
+            if (!data) break;
+
+            totalCount = data.total_count ?? items.length;
+            const pageItems = data.items ?? [];
+            items.push(...pageItems);
+            onProgress?.(items.length, totalCount);
+
+            if (pageItems.length < perPage) break;
+            if (page * perPage >= 1000) break;
+            page++;
+        }
+
+        return items;
+    }
+
+    async getContents(owner, repo, path) {
+        if (this.rateLimited) return null;
+        const url = path
+            ? `${API_BASE}/repos/${owner}/${repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}`
+            : `${API_BASE}/repos/${owner}/${repo}/contents`;
+        try {
+            return await this.request(url);
+        } catch {
+            return null;
+        }
+    }
+
+    // Applies the priority order among the SVGs found in one directory listing.
+    pickSvgFromEntries(entries) {
+        const svgFiles = entries.filter(
+            (e) => e.type === 'file' && e.name.toLowerCase().endsWith('.svg')
+        );
+        if (!svgFiles.length) return null;
+
+        for (const preferredName of SVG_PREFERRED_NAMES) {
+            const match = svgFiles.find((f) => f.name.toLowerCase() === preferredName);
+            if (match) return match;
+        }
+        return svgFiles[0];
+    }
+
+    // Memoized per repo so re-renders (search/sort) never re-fetch.
+    findSvgFile(owner, repoName) {
+        const key = `${owner}/${repoName}`.toLowerCase();
+        if (this.svgCache.has(key)) return this.svgCache.get(key);
+        const promise = this._findSvgFileInner(owner, repoName);
+        this.svgCache.set(key, promise);
+        return promise;
+    }
+
+    async _findSvgFileInner(owner, repoName) {
+        const root = await this.getContents(owner, repoName, '');
+        if (!Array.isArray(root)) return null;
+
+        const rootMatch = this.pickSvgFromEntries(root);
+        if (rootMatch) return rootMatch;
+
+        // Breadth-first search of subdirectories, capped at depth 3 and
+        // a call budget so a huge monorepo can't exhaust the rate limit.
+        const queue = root
+            .filter((entry) => entry.type === 'dir')
+            .map((dir) => ({ path: dir.path, depth: 1 }));
+        let callsRemaining = MAX_CONTENTS_CALLS_PER_REPO;
+
+        while (queue.length && callsRemaining > 0) {
+            const { path, depth } = queue.shift();
+            if (depth > MAX_SUBDIR_DEPTH) continue;
+            callsRemaining--;
+
+            const entries = await this.getContents(owner, repoName, path);
+            if (!Array.isArray(entries)) continue;
+
+            const match = this.pickSvgFromEntries(entries);
+            if (match) return match;
+
+            if (depth < MAX_SUBDIR_DEPTH) {
+                for (const entry of entries) {
+                    if (entry.type === 'dir') queue.push({ path: entry.path, depth: depth + 1 });
+                }
+            }
+        }
+
+        return null;
+    }
+}
+
+// =============================================================
+// DATA NORMALIZATION
+// =============================================================
+
+function normalizeRepo(raw) {
+    return {
+        id: raw.id,
+        name: raw.name,
+        owner: raw.owner?.login ?? 'unknown',
+        description: raw.description ?? '',
+        stars: raw.stargazers_count ?? 0,
+        url: raw.html_url,
+        homepage: raw.homepage && raw.homepage.trim() ? raw.homepage.trim() : '',
+        updatedAt: raw.updated_at,
+        defaultBranch: raw.default_branch || 'main',
+    };
+}
+
+// =============================================================
+// APPLICATION CONTROLLER
+// Owns the DOM, orchestrates loading, rendering, filtering,
+// sorting, and all user interactions.
+// =============================================================
+
+class App {
+    constructor() {
+        // --- DOM references ---
+        this.gridEl = document.getElementById('repoGrid');
+        this.searchInput = document.getElementById('searchBox');
+        this.sortSelect = document.getElementById('sortSelect');
+        this.repoCountEl = document.getElementById('repoCount');
+        this.loadedCountEl = document.getElementById('loadedCount');
+        this.progressFillEl = document.getElementById('progressFill');
+        this.progressTextEl = document.getElementById('progressText');
+        this.statusMessageEl = document.getElementById('statusMessage');
+        this.toastEl = document.getElementById('toast');
+        this.cardTemplate = document.getElementById('repoCardTemplate');
+        this.skeletonTemplate = document.getElementById('skeletonTemplate');
+
+        // --- State ---
+        this.client = new GitHubClient();
+        this.client.onRateLimit = (resetEpoch) => this.handleRateLimit(resetEpoch);
+        this.allRepos = [];
+        this.searchTerm = '';
+        this.sortMode = this.sortSelect.value || 'stars';
+        this._toastTimer = null;
+
+        // Lazily resolves which SVG to show for a card only once it
+        // scrolls near the viewport.
+        this.svgObserver = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        this.svgObserver.unobserve(entry.target);
+                        this.loadSvgForContainer(entry.target);
+                    }
+                }
+            },
+            { rootMargin: '250px 0px', threshold: 0.01 }
+        );
+    }
+
+    init() {
+        this.bindEvents();
+        this.loadRepositories();
+    }
+
+    bindEvents() {
+        this.searchInput.addEventListener('input', debounce(() => {
+            this.searchTerm = this.searchInput.value.trim().toLowerCase();
+            this.filterAndRender();
+        }, 150));
+
+        this.sortSelect.addEventListener('change', () => {
+            this.sortMode = this.sortSelect.value;
+            this.filterAndRender();
+        });
+    }
+
+    handleRateLimit(resetEpoch) {
+        const resetText = resetEpoch
+            ? new Date(resetEpoch * 1000).toLocaleTimeString()
+            : 'shortly';
+        this.setStatus(
+            `GitHub API rate limit reached. Some SVG previews may be unavailable until ${resetText}. Please try again later.`,
+            'warning'
+        );
+    }
+
+    // ---------------------------------------------------------
+    // Loading
+    // ---------------------------------------------------------
+
+    async loadRepositories() {
+        this.renderSkeletons(SKELETON_COUNT);
+        this.setStatus('Connecting to the GitHub API…');
+        this.progressFillEl.classList.remove('complete', 'error');
+        this.progressFillEl.style.width = '0%';
+        this.loadedCountEl.textContent = '0';
+
+        try {
+            const rawRepos = await this.client.searchRepositoriesByTopic(
+                TOPIC,
+                (loaded, total) => this.updateProgress(loaded, total)
+            );
+            this.allRepos = rawRepos.map(normalizeRepo);
+            this.completeProgress(this.allRepos.length);
+
+            if (!this.allRepos.length) {
+                this.setStatus(`No repositories found for topic "${TOPIC}".`, 'warning');
+            } else {
+                this.setStatus(
+                    `Loaded ${this.allRepos.length} repositories tagged "${TOPIC}".`,
+                    'success'
+                );
+            }
+            this.filterAndRender();
+        } catch (err) {
+            console.error(err);
+            this.allRepos = [];
+            this.renderGrid([]);
+            this.errorProgress('Failed to load repositories');
+            if (err instanceof GitHubApiError && err.rateLimited) {
+                this.setStatus(
+                    'GitHub API rate limit exceeded. Add a personal access token to increase your limit and try again.',
+                    'error'
+                );
+            } else {
+                this.setStatus(`Error loading repositories: ${err.message}`, 'error');
+            }
+        }
+    }
+
+    updateProgress(loaded, total) {
+        const pct = total ? Math.min(100, Math.round((loaded / total) * 100)) : 0;
+        this.progressFillEl.style.width = `${pct}%`;
+        this.progressTextEl.textContent = total
+            ? `Loading repositories… ${loaded} / ${total}`
+            : `Loading repositories… ${loaded}`;
+        this.loadedCountEl.textContent = String(loaded);
+    }
+
+    completeProgress(total) {
+        this.progressFillEl.style.width = '100%';
+        this.progressFillEl.classList.add('complete');
+        this.progressTextEl.textContent = `Loaded ${total} repositories`;
+        this.loadedCountEl.textContent = String(total);
+    }
+
+    errorProgress(message) {
+        this.progressFillEl.classList.add('error');
+        this.progressTextEl.textContent = message;
+    }
+
+    setStatus(message, type = '') {
+        this.statusMessageEl.textContent = message;
+        this.statusMessageEl.className = '';
+        if (type === 'success') this.statusMessageEl.classList.add('status-success');
+        if (type === 'error') this.statusMessageEl.classList.add('status-error');
+        if (type === 'warning') this.statusMessageEl.classList.add('status-warning');
+    }
+
+    // ---------------------------------------------------------
+    // Search / sort / render
+    // ---------------------------------------------------------
+
+    filterAndRender() {
+        let list = this.allRepos;
+
+        if (this.searchTerm) {
+            list = list.filter((r) =>
+                r.name.toLowerCase().includes(this.searchTerm) ||
+                r.owner.toLowerCase().includes(this.searchTerm) ||
+                (r.description || '').toLowerCase().includes(this.searchTerm)
+            );
+        }
+
+        list = this.sortRepos(list, this.sortMode);
+        this.repoCountEl.textContent = String(list.length);
+        this.renderGrid(list);
+    }
+
+    sortRepos(list, mode) {
+        const copy = [...list];
+        switch (mode) {
+            case 'updated':
+                copy.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                break;
+            case 'alpha':
+                copy.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+                break;
+            case 'stars':
+            default:
+                copy.sort((a, b) => b.stars - a.stars);
+                break;
+        }
+        return copy;
+    }
+
+    renderSkeletons(count) {
+        this.gridEl.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < count; i++) {
+            fragment.appendChild(this.skeletonTemplate.content.cloneNode(true));
+        }
+        this.gridEl.appendChild(fragment);
+    }
+
+    renderGrid(repos) {
+        this.svgObserver.disconnect();
+        this.gridEl.innerHTML = '';
+
+        if (!repos.length) {
+            this.gridEl.appendChild(this.buildEmptyState());
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        for (const repo of repos) {
+            fragment.appendChild(this.createCard(repo));
+        }
+        this.gridEl.appendChild(fragment);
+    }
+
+    buildEmptyState() {
+        const div = document.createElement('div');
+        div.className = 'empty-state';
+
+        const heading = document.createElement('h2');
+        const message = document.createElement('p');
+
+        if (!this.allRepos.length) {
+            heading.textContent = 'No repositories loaded yet';
+            message.textContent = 'Waiting for data from the GitHub API…';
+        } else {
+            heading.textContent = 'No matching repositories';
+            message.textContent = 'Try a different search term.';
+        }
+
+        div.append(heading, message);
+        return div;
+    }
+
+    // ---------------------------------------------------------
+    // Card creation
+    // ---------------------------------------------------------
+
+    createCard(repo) {
+        const fragment = this.cardTemplate.content.cloneNode(true);
+        const card = fragment.querySelector('.repo-card');
+        const previewContainer = fragment.querySelector('.svg-container');
+        const img = fragment.querySelector('.repo-svg');
+        const nameEl = fragment.querySelector('.repo-name');
+        const ownerEl = fragment.querySelector('.repo-owner');
+        const descEl = fragment.querySelector('.repo-description');
+        const starsEl = fragment.querySelector('.star-count');
+        const updatedEl = fragment.querySelector('.updated-date');
+        const openBtn = fragment.querySelector('.open-button');
+        const homeBtn = fragment.querySelector('.homepage-button');
+
+        nameEl.textContent = repo.name;
+        ownerEl.textContent = repo.owner;
+        descEl.textContent = repo.description || 'No description provided.';
+        starsEl.textContent = formatCount(repo.stars);
+        starsEl.closest('.meta-item').title = `${repo.stars.toLocaleString()} stars`;
+        updatedEl.textContent = formatRelativeDate(repo.updatedAt);
+        updatedEl.title = new Date(repo.updatedAt).toLocaleString();
+        img.alt = `${repo.name} preview`;
+
+        openBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.open(repo.url, '_blank', 'noopener');
+        });
+
+        if (repo.homepage) {
+            homeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(repo.homepage, '_blank', 'noopener');
+            });
+        } else {
+            homeBtn.classList.add('hidden');
+        }
+
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Copy link to ${repo.owner}/${repo.name}`);
+        card.addEventListener('click', () => this.copyRepoUrl(repo, card));
+        card.addEventListener('keydown', (e) => {
+            if (e.target !== card) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.copyRepoUrl(repo, card);
+            }
+        });
+
+        previewContainer.dataset.owner = repo.owner;
+        previewContainer.dataset.repo = repo.name;
+        this.svgObserver.observe(previewContainer);
+
+        return card;
+    }
+
+    // ---------------------------------------------------------
+    // Lazy SVG resolution
+    // ---------------------------------------------------------
+
+    async loadSvgForContainer(container) {
+        const owner = container.dataset.owner;
+        const repoName = container.dataset.repo;
+        const img = container.querySelector('.repo-svg');
+
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        container.appendChild(spinner);
+
+        let match = null;
+        try {
+            match = await this.client.findSvgFile(owner, repoName);
+        } catch {
+            match = null;
+        }
+        spinner.remove();
+
+        if (match?.download_url) {
+            img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+            img.addEventListener('error', () => this.showPlaceholder(container, img, repoName), { once: true });
+            img.src = match.download_url;
+        } else {
+            this.showPlaceholder(container, img, repoName);
+        }
+    }
+
+    showPlaceholder(container, img, repoName) {
+        img.remove();
+        const placeholder = document.createElement('div');
+        placeholder.className = 'repo-placeholder';
+        placeholder.innerHTML = createPlaceholderSvg(repoName);
+        container.appendChild(placeholder);
+    }
+
+    // ---------------------------------------------------------
+    // Copy-to-clipboard
+    // ---------------------------------------------------------
+
+    async copyRepoUrl(repo, card) {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(repo.url);
+            } else {
+                this.legacyCopy(repo.url);
+            }
+            this.showToast('Copied!');
+            card.classList.add('copied');
+            setTimeout(() => card.classList.remove('copied'), 900);
+        } catch {
+            this.showToast('Could not copy link');
+        }
+    }
+
+    legacyCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+
+    showToast(message) {
+        this.toastEl.textContent = message;
+        this.toastEl.classList.add('show');
+        clearTimeout(this._toastTimer);
+        this._toastTimer = setTimeout(() => this.toastEl.classList.remove('show'), 1800);
+    }
+}
+
+// =============================================================
+// BOOTSTRAP
+// =============================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    new App().init();
+});
+
+    </script>
+
+</body>
+</html>

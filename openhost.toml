@@ -1,0 +1,23 @@
+[app]
+name = "Inspirations View"
+version = "0.1.0"
+description = "Inspirations"
+
+[runtime.container]
+image = "Dockerfile"
+port = 8000
+
+[routing]
+# Without this, the entire app sits behind OpenHost's owner-only zone_auth
+# login. This app has no sensitive data of its own (it only calls the public,
+# unauthenticated GitHub REST API from the visitor's browser), so the whole
+# site is opened up to anyone.
+public_paths = ["/"]
+
+[data]
+app_data = true        # persistent, backed-up /data mount
+sqlite = ["main"]      # optional: managed SQLite path
+
+[resources]
+memory_mb = 512
+cpu_cores = 0.1
