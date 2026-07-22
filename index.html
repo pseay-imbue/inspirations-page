@@ -1720,44 +1720,6 @@ main {
 
 }
 
-.install-hint {
-
-    display: none;
-
-    background: var(--bg-secondary);
-
-    border: 1px solid var(--yellow);
-
-    border-radius: 10px;
-
-    padding: 14px 18px;
-
-    color: var(--text);
-
-    font-size: .95rem;
-
-    margin-bottom: 20px;
-
-}
-
-.install-hint.visible {
-
-    display: block;
-
-    animation: fadeIn .3s ease;
-
-}
-
-.install-hint a {
-
-    color: var(--accent);
-
-    font-weight: 600;
-
-    text-decoration: underline;
-
-}
-
 /* ==========================================================
    README
 ========================================================== */
@@ -1914,6 +1876,8 @@ main {
 
     inset: 0;
 
+    z-index: 10;   /* keeps the word in front of the liquid */
+
     display: flex;
 
     align-items: center;
@@ -1929,6 +1893,8 @@ main {
     color: #30363d;
 
     user-select: none;
+
+    pointer-events: none;
 
 }
 
@@ -2038,7 +2004,9 @@ main {
 
     right: 0;
 
-    bottom: -120px;
+    /* Deep enough that the flood still covers the bottom edge when the
+       layer is translated up past the top of the screen. */
+    bottom: -30vh;
 
     background:
         linear-gradient(
@@ -3196,17 +3164,7 @@ class App {
 
         actions.append(createBtn, githubBtn);
 
-        const installHint = document.createElement('div');
-        installHint.className = 'install-hint';
-        installHint.innerHTML = `
-            Minds doesn't seem to be installed.
-            <a href="https://imbue.com/product/minds" target="_blank" rel="noopener">
-                Install Minds
-            </a>
-            to open this Inspiration as a workspace.
-        `;
-
-        createBtn.addEventListener('click', () => this.launchInMinds(repo, installHint));
+        createBtn.addEventListener('click', () => this.launchInMinds(repo));
 
         const readmeSection = document.createElement('section');
         readmeSection.className = 'readme-section';
@@ -3215,7 +3173,7 @@ class App {
         readmeSection.appendChild(spinner);
         this.loadReadme(readmeSection, repo);
 
-        this.detailEl.append(back, hero, header, meta, desc, actions, installHint, readmeSection);
+        this.detailEl.append(back, hero, header, meta, desc, actions, readmeSection);
     }
 
     async loadHeroSvg(hero, repo) {
@@ -3268,35 +3226,34 @@ class App {
 
     // ---------------------------------------------------------
     // Open in Minds
-    // Deeplink format from imbue-ai/mngr#2565:
-    //   minds://create?git_url=<repo>&branch=<ref>
+    // The animation plays here, then hands off to redirect.html,
+    // which fires the minds:// deeplink (imbue-ai/mngr#2565) and
+    // owns the not-installed fallback.
     // ---------------------------------------------------------
 
-    buildMindsUrl(repo) {
-        const gitUrl = `${repo.url}.git`;
-        return `minds://create?git_url=${encodeURIComponent(gitUrl)}&branch=${encodeURIComponent(repo.defaultBranch)}`;
+    async buildRedirectUrl(repo) {
+        const query = new URLSearchParams({
+            git_url: `${repo.url}.git`,
+            branch: repo.defaultBranch,
+            name: `${repo.owner}/${repo.name}`,
+        });
+        // Pass the inspiration's logo along so the redirect page can show it.
+        try {
+            const svg = await this.client.findSvgFile(repo.owner, repo.name);
+            if (svg?.download_url) query.set('logo', svg.download_url);
+        } catch { /* logo is optional */ }
+        return `redirect.html?${query}`;
     }
 
-    launchInMinds(repo, installHint) {
+    launchInMinds(repo) {
         if (this._launching) return;
         this._launching = true;
-        installHint.classList.remove('visible');
 
+        const urlPromise = this.buildRedirectUrl(repo);
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        this.playMindsAnimation(reducedMotion, () => {
-            window.location.href = this.buildMindsUrl(repo);
-
-            // If the protocol handler works the page loses focus/visibility.
-            // If we're still here and visible a moment later, Minds is
-            // probably not installed.
-            setTimeout(() => {
-                if (!document.hidden && document.hasFocus()) {
-                    installHint.classList.add('visible');
-                    installHint.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                this.hideMindsOverlay();
-                this._launching = false;
-            }, 2000);
+        this.playMindsAnimation(reducedMotion, async () => {
+            window.location.href = await urlPromise;
+            this._launching = false;
         });
     }
 
@@ -3347,14 +3304,25 @@ class App {
             Math.hypot(width - bx, by),
             Math.hypot(bx, height - by),
             Math.hypot(width - bx, height - by)
-        ) + 80;
+        ) + 250;   // margin exceeds the max wobble so the blob starts fully off-screen
 
         const POINTS = 72;
         const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
         const start = performance.now();
 
+        // rAF stops in hidden tabs; this backstop guarantees the launch
+        // still completes if the user switches away mid-animation.
+        let finished = false;
+        const finish = () => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(fallbackTimer);
+            onDone();
+        };
+        const fallbackTimer = setTimeout(finish, duration + 400);
+
         const frame = (now) => {
-            if (!overlay.classList.contains('draining')) return;
+            if (finished || !overlay.classList.contains('draining')) return;
 
             const t = Math.min(1, (now - start) / duration);
             const radius = maxRadius * (1 - easeInOut(t));
@@ -3386,7 +3354,7 @@ class App {
             path.setAttribute('d', d + ' Z');
 
             if (t < 1) requestAnimationFrame(frame);
-            else onDone();
+            else finish();
         };
         requestAnimationFrame(frame);
     }
