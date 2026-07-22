@@ -2115,41 +2115,31 @@ main {
 
 }
 
-/* Funnel: the whole flood collapses into the bulb point */
+/* Drain: a liquid blob (drawn per-frame in JS) flows into the bulb */
 
-#mindsOverlay.funneling .wave-layer {
+.drain-svg {
 
-    animation: waveFunnel .9s cubic-bezier(.55, 0, .6, 1) forwards;
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    display: none;
 
 }
 
-@keyframes waveFunnel {
+#mindsOverlay.draining .drain-svg {
 
-    from {
+    display: block;
 
-        transform: translateY(-20%) scale(1);
+}
 
-        border-radius: 0;
+#mindsOverlay.draining .wave-layer {
 
-        opacity: 1;
-
-    }
-
-    70% {
-
-        opacity: 1;
-
-    }
-
-    to {
-
-        transform: translateY(0) scale(.01);
-
-        border-radius: 50%;
-
-        opacity: 0;
-
-    }
+    display: none;
 
 }
 
@@ -2354,6 +2344,16 @@ main {
             </span><span>nspiration</span>
 
         </div>
+
+        <svg class="drain-svg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <radialGradient id="drainGradient">
+                    <stop offset="0%" stop-color="#f2cc60" />
+                    <stop offset="100%" stop-color="#d29922" />
+                </radialGradient>
+            </defs>
+            <path class="drain-path" fill="url(#drainGradient)" />
+        </svg>
 
         <div class="wave-layer">
 
@@ -3300,8 +3300,8 @@ class App {
         });
     }
 
-    // Phase timings: wave floods the screen (1.3s), funnels into the
-    // bulb (0.9s), the bulb lights up, then the deeplink fires.
+    // Phase timings: wave floods the screen (1.3s), the liquid drains
+    // into the bulb (1.4s), the bulb lights up, then the deeplink fires.
     playMindsAnimation(skip, onLit) {
         const overlay = this.overlayEl;
         overlay.classList.add('active');
@@ -3314,23 +3314,85 @@ class App {
 
         overlay.classList.add('rising');
         setTimeout(() => {
-            // Funnel the flood into the lightbulb's actual position.
-            const bulb = overlay.querySelector('.overlay-bulb');
-            const wave = overlay.querySelector('.wave-layer');
-            const rect = bulb.getBoundingClientRect();
-            wave.style.transformOrigin =
-                `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
             overlay.classList.remove('rising');
-            overlay.classList.add('funneling');
+            overlay.classList.add('draining');
+            this.runDrainAnimation(1400, () => {
+                overlay.classList.remove('draining');
+                overlay.classList.add('lit');
+                setTimeout(onLit, 550);
+            });
         }, 1350);
-        setTimeout(() => {
-            overlay.classList.add('lit');
-        }, 2150);
-        setTimeout(onLit, 2700);
+    }
+
+    // Draws the yellow flood as a liquid blob whose wobbly edge is a sum
+    // of drifting sine waves, contracting from the whole screen into the
+    // bulb. Redrawn every frame so the surface keeps sloshing as it flows.
+    runDrainAnimation(duration, onDone) {
+        const overlay = this.overlayEl;
+        const svg = overlay.querySelector('.drain-svg');
+        const path = overlay.querySelector('.drain-path');
+        const bulbRect = overlay.querySelector('.overlay-bulb').getBoundingClientRect();
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        // Aim for the neck of the bulb so the liquid appears to pour in.
+        const bx = bulbRect.left + bulbRect.width / 2;
+        const by = bulbRect.top + bulbRect.height * 0.45;
+
+        // Start with a radius that covers the farthest screen corner.
+        const maxRadius = Math.max(
+            Math.hypot(bx, by),
+            Math.hypot(width - bx, by),
+            Math.hypot(bx, height - by),
+            Math.hypot(width - bx, height - by)
+        ) + 80;
+
+        const POINTS = 72;
+        const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+        const start = performance.now();
+
+        const frame = (now) => {
+            if (!overlay.classList.contains('draining')) return;
+
+            const t = Math.min(1, (now - start) / duration);
+            const radius = maxRadius * (1 - easeInOut(t));
+            const seconds = now / 1000;
+
+            // Wobble scales with the remaining radius so the blob settles
+            // as it reaches the bulb; three incommensurate sine bands keep
+            // the edge organic instead of periodic.
+            const wobble = Math.min(radius * 0.28, 26 + radius * 0.06);
+            const points = [];
+            for (let i = 0; i < POINTS; i++) {
+                const angle = (i / POINTS) * Math.PI * 2;
+                const r = radius
+                    + wobble * Math.sin(angle * 3 + seconds * 3.1)
+                    + wobble * 0.6 * Math.sin(angle * 5 - seconds * 4.3)
+                    + wobble * 0.35 * Math.sin(angle * 8 + seconds * 5.7);
+                points.push([bx + Math.cos(angle) * r, by + Math.sin(angle) * r]);
+            }
+
+            // Smooth closed Catmull-Rom-style curve through the points.
+            let d = '';
+            for (let i = 0; i < POINTS; i++) {
+                const [x0, y0] = points[i];
+                const [x1, y1] = points[(i + 1) % POINTS];
+                const mx = (x0 + x1) / 2;
+                const my = (y0 + y1) / 2;
+                d += i === 0 ? `M ${mx} ${my}` : ` Q ${x0} ${y0} ${mx} ${my}`;
+            }
+            path.setAttribute('d', d + ' Z');
+
+            if (t < 1) requestAnimationFrame(frame);
+            else onDone();
+        };
+        requestAnimationFrame(frame);
     }
 
     hideMindsOverlay() {
-        this.overlayEl.classList.remove('active', 'rising', 'funneling', 'lit');
+        this.overlayEl.classList.remove('active', 'rising', 'draining', 'lit');
     }
 
     showToast(message) {
