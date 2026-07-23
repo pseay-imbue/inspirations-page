@@ -1,7 +1,7 @@
 FROM python:3.12-alpine
 
 WORKDIR /app
-COPY index.html .
+COPY index.html redirect.html ./
 
 EXPOSE 8000
 
