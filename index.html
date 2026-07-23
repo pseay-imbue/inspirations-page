@@ -25,8 +25,8 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    background: #0d1117;
-    color: #e6edf3;
+    background: var(--bg);
+    color: var(--text);
     font-family:
         Inter,
         ui-sans-serif,
@@ -55,6 +55,7 @@ body {
     --border: #30363d;
 
     --text: #e6edf3;
+    --text-strong: #ffffff;
     --muted: #8b949e;
 
     --accent: #2f81f7;
@@ -64,6 +65,17 @@ body {
     --yellow: #d29922;
     --red: #f85149;
 
+    --header-bg: rgba(13,17,23,.92);
+    --placeholder: #6e7681;
+    --skeleton: #21262d;
+    --shimmer: rgba(255,255,255,.08);
+    --toast-bg: rgba(22,27,34,.96);
+    --code-block-bg: #0d1117;
+    --inline-code-bg: rgba(110,118,129,.25);
+    --scroll-thumb: #30363d;
+    --scroll-thumb-hover: #484f58;
+    --card-glow: rgba(88,166,255,.08);
+
     --shadow:
         0 10px 35px rgba(0,0,0,.35);
 
@@ -71,6 +83,45 @@ body {
 
     --transition:
         180ms ease;
+
+}
+
+@media (prefers-color-scheme: light) {
+
+    :root {
+
+        --bg: #ffffff;
+        --bg-secondary: #f6f8fa;
+        --bg-hover: #eaeef2;
+
+        --border: #d0d7de;
+
+        --text: #1f2328;
+        --text-strong: #1f2328;
+        --muted: #656d76;
+
+        --accent: #0969da;
+        --accent-hover: #0a6ae6;
+
+        --green: #1a7f37;
+        --yellow: #9a6700;
+        --red: #cf222e;
+
+        --header-bg: rgba(255,255,255,.92);
+        --placeholder: #8c959f;
+        --skeleton: #eaeef2;
+        --shimmer: rgba(0,0,0,.05);
+        --toast-bg: rgba(255,255,255,.97);
+        --code-block-bg: #f6f8fa;
+        --inline-code-bg: rgba(110,118,129,.15);
+        --scroll-thumb: #c8d1da;
+        --scroll-thumb-hover: #aeb8c2;
+        --card-glow: rgba(9,105,218,.05);
+
+        --shadow:
+            0 10px 35px rgba(31,35,40,.12);
+
+    }
 
 }
 
@@ -106,7 +157,7 @@ select {
 
     padding: 20px 32px;
 
-    background: rgba(13,17,23,.92);
+    background: var(--header-bg);
 
     backdrop-filter: blur(16px);
 
@@ -188,6 +239,8 @@ button.secondary {
     background: var(--bg-secondary);
 
     border: 1px solid var(--border);
+
+    color: var(--text);
 
 }
 
@@ -316,7 +369,7 @@ select:focus {
 
 input::placeholder {
 
-    color: #6e7681;
+    color: var(--placeholder);
 
 }
 
@@ -334,7 +387,7 @@ input::placeholder {
 
 .stat span {
 
-    color: white;
+    color: var(--text-strong);
 
     font-weight: 700;
 
@@ -460,7 +513,7 @@ main {
 
 ::-webkit-scrollbar-thumb {
 
-    background: #30363d;
+    background: var(--scroll-thumb);
 
     border-radius: 999px;
 
@@ -468,7 +521,7 @@ main {
 
 ::-webkit-scrollbar-thumb:hover {
 
-    background: #484f58;
+    background: var(--scroll-thumb-hover);
 
 }
 
@@ -478,7 +531,7 @@ main {
 
     scrollbar-width: thin;
 
-    scrollbar-color: #484f58 var(--bg);
+    scrollbar-color: var(--scroll-thumb-hover) var(--bg);
 
 }
 
@@ -563,7 +616,7 @@ main {
 
 .repo-preview {
 
-    height: 180px;
+    height: 220px;
 
     display: flex;
 
@@ -574,8 +627,8 @@ main {
     background:
         linear-gradient(
             180deg,
-            #161b22,
-            #0d1117
+            var(--bg-secondary),
+            var(--bg)
         );
 
     border-bottom:
@@ -601,7 +654,7 @@ main {
 
             circle at center,
 
-            rgba(88,166,255,.08),
+            var(--card-glow),
 
             transparent 70%
 
@@ -623,15 +676,13 @@ main {
 
     justify-content: center;
 
-    padding: 22px;
-
 }
 
 .repo-svg {
 
-    max-width: 100%;
+    width: 100%;
 
-    max-height: 130px;
+    height: 100%;
 
     object-fit: contain;
 
@@ -663,8 +714,8 @@ main {
 
         linear-gradient(
             135deg,
-            #22272e,
-            #30363d
+            var(--bg-hover),
+            var(--border)
         );
 
     display: flex;
@@ -713,7 +764,7 @@ main {
 
     margin: 0;
 
-    color: white;
+    color: var(--text-strong);
 
     font-size: 1.2rem;
 
@@ -805,7 +856,7 @@ main {
 
 .updated-date {
 
-    color: #c9d1d9;
+    color: var(--text);
 
     font-weight: 600;
 
@@ -860,7 +911,7 @@ main {
         1px solid var(--border);
 
     color:
-        white;
+        var(--text-strong);
 
 }
 
@@ -969,7 +1020,7 @@ main {
 
 .empty-state h2 {
 
-    color: white;
+    color: var(--text-strong);
 
     margin-bottom: 10px;
 
@@ -1015,17 +1066,7 @@ main {
 
 .repo-card:hover {
 
-    background:
-
-        linear-gradient(
-
-            180deg,
-
-            #1a2029,
-
-            #161b22
-
-        );
+    background: var(--bg-hover);
 
 }
 
@@ -1081,7 +1122,7 @@ main {
 
     overflow: hidden;
 
-    background: #21262d;
+    background: var(--skeleton);
 
     border-radius: 10px;
 
@@ -1102,7 +1143,7 @@ main {
         linear-gradient(
             90deg,
             transparent,
-            rgba(255,255,255,.08),
+            var(--shimmer),
             transparent
         );
 
@@ -1186,9 +1227,9 @@ main {
 
     transform: translate(-50%, 100px);
 
-    background: rgba(22,27,34,.96);
+    background: var(--toast-bg);
 
-    color: white;
+    color: var(--text-strong);
 
     padding: 14px 22px;
 
@@ -1300,7 +1341,7 @@ main {
 
     border-radius: 50%;
 
-    border: 3px solid #30363d;
+    border: 3px solid var(--border);
 
     border-top-color: var(--accent);
 
@@ -1534,6 +1575,596 @@ main {
 }
 
 /* ==========================================================
+   HEADER SEARCH
+========================================================== */
+
+.header-title h1 {
+
+    margin: 0;
+
+    font-size: 1.6rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+#searchBox {
+
+    flex: 1;
+
+    max-width: 520px;
+
+}
+
+/* ==========================================================
+   DETAIL VIEW
+========================================================== */
+
+.detail-view {
+
+    max-width: 960px;
+
+    margin: 0 auto;
+
+    padding: 32px 0 60px;
+
+}
+
+.back-button {
+
+    background: transparent;
+
+    border: 1px solid var(--border);
+
+    color: var(--muted);
+
+    margin-bottom: 24px;
+
+}
+
+.back-button:hover {
+
+    background: var(--bg-hover);
+
+    color: var(--text);
+
+}
+
+.detail-hero {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    height: 280px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--bg-secondary),
+            var(--bg)
+        );
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    margin-bottom: 28px;
+
+}
+
+.detail-hero img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+}
+
+.detail-hero .repo-placeholder {
+
+    width: 140px;
+
+    height: 140px;
+
+}
+
+.detail-header {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 18px;
+
+    margin-bottom: 12px;
+
+}
+
+.detail-header h1 {
+
+    margin: 0;
+
+    font-size: 2rem;
+
+    word-break: break-word;
+
+}
+
+.detail-owner {
+
+    color: var(--accent);
+
+    font-weight: 600;
+
+}
+
+.detail-meta {
+
+    display: flex;
+
+    gap: 20px;
+
+    color: var(--muted);
+
+    font-size: .92rem;
+
+    margin-bottom: 20px;
+
+}
+
+.detail-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+
+}
+
+.create-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #d29922,
+            #e3b341
+        );
+
+    color: #1c1400;
+
+    font-weight: 700;
+
+}
+
+.create-button:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #e3b341,
+            #f2cc60
+        );
+
+}
+
+/* ==========================================================
+   README
+========================================================== */
+
+.readme-section {
+
+    background: var(--bg-secondary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 28px 32px;
+
+    overflow-wrap: break-word;
+
+}
+
+.readme-section .spinner {
+
+    margin: 30px auto;
+
+}
+
+.readme-body {
+
+    font-size: .96rem;
+
+    line-height: 1.65;
+
+}
+
+.readme-body h1,
+.readme-body h2 {
+
+    border-bottom: 1px solid var(--border);
+
+    padding-bottom: .3em;
+
+}
+
+.readme-body a {
+
+    color: var(--accent);
+
+}
+
+.readme-body a:hover {
+
+    text-decoration: underline;
+
+}
+
+.readme-body img {
+
+    max-width: 100%;
+
+}
+
+.readme-body pre {
+
+    background: var(--code-block-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    padding: 14px;
+
+    overflow-x: auto;
+
+}
+
+.readme-body code {
+
+    background: var(--inline-code-bg);
+
+    border-radius: 5px;
+
+    padding: 2px 5px;
+
+    font-size: .9em;
+
+}
+
+.readme-body pre code {
+
+    background: none;
+
+    padding: 0;
+
+}
+
+.readme-body blockquote {
+
+    border-left: 3px solid var(--border);
+
+    margin-left: 0;
+
+    padding-left: 16px;
+
+    color: var(--muted);
+
+}
+
+.readme-body table {
+
+    border-collapse: collapse;
+
+}
+
+.readme-body th,
+.readme-body td {
+
+    border: 1px solid var(--border);
+
+    padding: 6px 12px;
+
+}
+
+/* ==========================================================
+   MINDS LAUNCH OVERLAY
+   Phase 1: yellow wave rises and floods the screen.
+   Phase 2: the flood funnels (scales down) into the lightbulb
+            sitting in the "I" of "Inspiration".
+   Phase 3: the bulb lights up, then the deeplink opens.
+========================================================== */
+
+#mindsOverlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    background: rgba(13,17,23,.97);
+
+    display: none;
+
+    overflow: hidden;
+
+}
+
+#mindsOverlay.active {
+
+    display: block;
+
+}
+
+.overlay-word {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 10;   /* keeps the word in front of the liquid */
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: clamp(3rem, 11vw, 9rem);
+
+    font-weight: 800;
+
+    letter-spacing: .02em;
+
+    color: #30363d;
+
+    user-select: none;
+
+    pointer-events: none;
+
+}
+
+.overlay-word .letter-i {
+
+    position: relative;
+
+    display: inline-block;
+
+}
+
+.overlay-bulb {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -58%);
+
+    width: .62em;
+
+    height: .62em;
+
+}
+
+.overlay-bulb svg {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+}
+
+.bulb-glass {
+
+    fill: #21262d;
+
+    stroke: #484f58;
+
+    stroke-width: 3;
+
+    transition: fill .4s ease;
+
+}
+
+.bulb-base {
+
+    fill: #484f58;
+
+}
+
+.bulb-glow {
+
+    opacity: 0;
+
+    transition: opacity .5s ease;
+
+}
+
+#mindsOverlay.lit .bulb-glass {
+
+    fill: #f2cc60;
+
+    stroke: #e3b341;
+
+}
+
+#mindsOverlay.lit .bulb-glow {
+
+    opacity: 1;
+
+}
+
+#mindsOverlay.lit .overlay-word {
+
+    color: #6e7681;
+
+    text-shadow: 0 0 60px rgba(242,204,96,.25);
+
+}
+
+/* The yellow flood layer */
+
+.wave-layer {
+
+    position: absolute;
+
+    inset: 0;
+
+    transform: translateY(101%);
+
+    will-change: transform;
+
+}
+
+.wave-fill {
+
+    position: absolute;
+
+    top: 60px;
+
+    left: 0;
+
+    right: 0;
+
+    /* Deep enough that the flood still covers the bottom edge when the
+       layer is translated up past the top of the screen. */
+    bottom: -30vh;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f2cc60,
+            #d29922
+        );
+
+}
+
+.wave-crest {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 200%;
+
+    height: 61px;
+
+    animation: waveDrift 1.6s linear infinite;
+
+}
+
+.wave-crest svg {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    fill: #f2cc60;
+
+}
+
+@keyframes waveDrift {
+
+    from {
+
+        transform: translateX(0);
+
+    }
+
+    to {
+
+        transform: translateX(-50%);
+
+    }
+
+}
+
+#mindsOverlay.rising .wave-layer {
+
+    animation: waveRise 1.3s ease-in-out forwards;
+
+}
+
+@keyframes waveRise {
+
+    from {
+
+        transform: translateY(101%);
+
+    }
+
+    to {
+
+        transform: translateY(-20%);
+
+    }
+
+}
+
+/* Drain: a liquid blob (drawn per-frame in JS) flows into the bulb */
+
+.drain-svg {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    display: none;
+
+}
+
+#mindsOverlay.draining .drain-svg {
+
+    display: block;
+
+}
+
+#mindsOverlay.draining .wave-layer {
+
+    display: none;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #mindsOverlay .wave-layer {
+
+        display: none;
+
+    }
+
+}
+
+/* ==========================================================
    UTILITIES
 ========================================================== */
 
@@ -1645,114 +2276,27 @@ main {
     ======================================================== -->
     <header class="app-header">
 
-        <div class="header-left">
+        <a class="header-title" href="#">
             <h1>
-                Minds Inspiration Explorer
+                Inspirations
             </h1>
+        </a>
 
-            <p class="subtitle">
-                Browse every GitHub repository tagged with
-                <code>minds-inspiration</code>
-            </p>
-        </div>
+        <input
+            id="searchBox"
+            type="search"
+            placeholder="Search inspirations..."
+            autocomplete="off">
 
     </header>
 
     <!-- =======================================================
-         TOOLBAR
+         STATUS (hidden unless there is something to say)
     ======================================================== -->
 
-    <section class="toolbar">
-
-        <div class="toolbar-group search-group">
-
-            <label for="searchBox">
-                Search
-            </label>
-
-            <input
-                id="searchBox"
-                type="search"
-                placeholder="Search repositories..."
-                autocomplete="off">
-
-        </div>
-
-        <div class="toolbar-group sort-group">
-
-            <label for="sortSelect">
-                Sort
-            </label>
-
-            <select id="sortSelect">
-
-                <option value="stars">
-                    Stars
-                </option>
-
-                <option value="updated">
-                    Recently Updated
-                </option>
-
-                <option value="alpha">
-                    Alphabetical
-                </option>
-
-            </select>
-
-        </div>
-
-        <div class="toolbar-group stats-group">
-
-            <div class="stat">
-                Repositories:
-                <span id="repoCount">
-                    0
-                </span>
-            </div>
-
-            <div class="stat">
-                Loaded:
-                <span id="loadedCount">
-                    0
-                </span>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- =======================================================
-         PROGRESS BAR
-    ======================================================== -->
-
-    <section class="progress-wrapper">
-
-        <div class="progress-bar">
-
-            <div
-                id="progressFill"
-                class="progress-fill">
-            </div>
-
-        </div>
-
-        <div
-            id="progressText"
-            class="progress-text">
-            Waiting...
-        </div>
-
-    </section>
-
-    <!-- =======================================================
-         STATUS
-    ======================================================== -->
-
-    <section id="statusBar">
+    <section id="statusBar" class="hidden">
 
         <div id="statusMessage">
-            Ready.
         </div>
 
     </section>
@@ -1771,7 +2315,73 @@ main {
 
         </section>
 
+        <section
+            id="detailView"
+            class="detail-view hidden">
+        </section>
+
     </main>
+
+    <!-- =======================================================
+         MINDS LAUNCH OVERLAY
+    ======================================================== -->
+
+    <div id="mindsOverlay" aria-hidden="true">
+
+        <div class="overlay-word">
+
+            <span class="letter-i">
+                I
+                <span class="overlay-bulb">
+                    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                        <g class="bulb-glow">
+                            <circle cx="50" cy="45" r="44" fill="rgba(242,204,96,.28)" />
+                            <circle cx="50" cy="45" r="30" fill="rgba(242,204,96,.35)" />
+                        </g>
+                        <path class="bulb-glass"
+                              d="M50 5
+                                 C 27 5 12 22 12 43
+                                 C 12 57 20 66 27 74
+                                 C 32 80 35 84 35 90
+                                 L 65 90
+                                 C 65 84 68 80 73 74
+                                 C 80 66 88 57 88 43
+                                 C 88 22 73 5 50 5 Z" />
+                        <rect class="bulb-base" x="35" y="94" width="30" height="7" rx="3" />
+                        <rect class="bulb-base" x="37" y="104" width="26" height="7" rx="3" />
+                        <rect class="bulb-base" x="41" y="114" width="18" height="6" rx="3" />
+                    </svg>
+                </span>
+            </span><span>nspiration</span>
+
+        </div>
+
+        <svg class="drain-svg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <radialGradient id="drainGradient">
+                    <stop offset="0%" stop-color="#f2cc60" />
+                    <stop offset="100%" stop-color="#d29922" />
+                </radialGradient>
+            </defs>
+            <path class="drain-path" fill="url(#drainGradient)" />
+        </svg>
+
+        <div class="wave-layer">
+
+            <div class="wave-crest">
+                <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+                    <path d="M0 30
+                             Q 75 0 150 30 T 300 30 T 450 30 T 600 30
+                             T 750 30 T 900 30 T 1050 30 T 1200 30
+                             V 60 H 0 Z" />
+                </svg>
+            </div>
+
+            <div class="wave-fill"></div>
+
+        </div>
+
+    </div>
 
     <!-- =======================================================
          CARD TEMPLATE
@@ -2034,8 +2644,9 @@ class GitHubApiError extends Error {
 
 class GitHubClient {
     constructor() {
-        this.cache = new Map();      // url -> Promise<json|null>
-        this.svgCache = new Map();   // "owner/repo" -> Promise<entry|null>
+        this.cache = new Map();       // url -> Promise<json|null>
+        this.svgCache = new Map();    // "owner/repo" -> Promise<entry|null>
+        this.readmeCache = new Map(); // "owner/repo" -> Promise<html|null>
         this.limiter = new RateLimiter(MAX_CONCURRENT_REQUESTS);
         this.rateLimitRemaining = null;
         this.rateLimitReset = null;
@@ -2130,6 +2741,31 @@ class GitHubClient {
         }
     }
 
+    // Fetches the repository README pre-rendered as sanitized HTML by
+    // GitHub (Accept: vnd.github.html). Memoized per repo.
+    getReadmeHtml(owner, repoName) {
+        const key = `${owner}/${repoName}`.toLowerCase();
+        if (this.readmeCache.has(key)) return this.readmeCache.get(key);
+        const promise = this.limiter.run(async () => {
+            let response;
+            try {
+                response = await fetch(
+                    `${API_BASE}/repos/${owner}/${repoName}/readme`,
+                    { headers: { ...this.buildHeaders(), Accept: 'application/vnd.github.html' } }
+                );
+            } catch {
+                throw new GitHubApiError('Network error while contacting the GitHub API.');
+            }
+            if (response.status === 404) return null;
+            if (!response.ok) {
+                throw new GitHubApiError(`GitHub API responded with ${response.status}`, { status: response.status });
+            }
+            return response.text();
+        }).catch((err) => { this.readmeCache.delete(key); throw err; });
+        this.readmeCache.set(key, promise);
+        return promise;
+    }
+
     // Applies the priority order among the SVGs found in one directory listing.
     pickSvgFromEntries(entries) {
         const svgFiles = entries.filter(
@@ -2217,14 +2853,12 @@ class App {
     constructor() {
         // --- DOM references ---
         this.gridEl = document.getElementById('repoGrid');
+        this.detailEl = document.getElementById('detailView');
         this.searchInput = document.getElementById('searchBox');
-        this.sortSelect = document.getElementById('sortSelect');
-        this.repoCountEl = document.getElementById('repoCount');
-        this.loadedCountEl = document.getElementById('loadedCount');
-        this.progressFillEl = document.getElementById('progressFill');
-        this.progressTextEl = document.getElementById('progressText');
+        this.statusBarEl = document.getElementById('statusBar');
         this.statusMessageEl = document.getElementById('statusMessage');
         this.toastEl = document.getElementById('toast');
+        this.overlayEl = document.getElementById('mindsOverlay');
         this.cardTemplate = document.getElementById('repoCardTemplate');
         this.skeletonTemplate = document.getElementById('skeletonTemplate');
 
@@ -2233,8 +2867,9 @@ class App {
         this.client.onRateLimit = (resetEpoch) => this.handleRateLimit(resetEpoch);
         this.allRepos = [];
         this.searchTerm = '';
-        this.sortMode = this.sortSelect.value || 'stars';
+        this.loaded = false;
         this._toastTimer = null;
+        this._launching = false;
 
         // Lazily resolves which SVG to show for a card only once it
         // scrolls near the viewport.
@@ -2259,13 +2894,15 @@ class App {
     bindEvents() {
         this.searchInput.addEventListener('input', debounce(() => {
             this.searchTerm = this.searchInput.value.trim().toLowerCase();
+            // Searching always brings you back to the grid.
+            if (location.hash) {
+                history.replaceState(null, '', location.pathname + location.search);
+                this.renderRoute();
+            }
             this.filterAndRender();
         }, 150));
 
-        this.sortSelect.addEventListener('change', () => {
-            this.sortMode = this.sortSelect.value;
-            this.filterAndRender();
-        });
+        window.addEventListener('hashchange', () => this.renderRoute());
     }
 
     handleRateLimit(resetEpoch) {
@@ -2284,68 +2921,39 @@ class App {
 
     async loadRepositories() {
         this.renderSkeletons(SKELETON_COUNT);
-        this.setStatus('Connecting to the GitHub API…');
-        this.progressFillEl.classList.remove('complete', 'error');
-        this.progressFillEl.style.width = '0%';
-        this.loadedCountEl.textContent = '0';
+        this.setStatus('');
 
         try {
-            const rawRepos = await this.client.searchRepositoriesByTopic(
-                TOPIC,
-                (loaded, total) => this.updateProgress(loaded, total)
-            );
+            const rawRepos = await this.client.searchRepositoriesByTopic(TOPIC);
             this.allRepos = rawRepos.map(normalizeRepo);
-            this.completeProgress(this.allRepos.length);
+            this.loaded = true;
 
             if (!this.allRepos.length) {
-                this.setStatus(`No repositories found for topic "${TOPIC}".`, 'warning');
-            } else {
-                this.setStatus(
-                    `Loaded ${this.allRepos.length} repositories tagged "${TOPIC}".`,
-                    'success'
-                );
+                this.setStatus(`No inspirations found for topic "${TOPIC}".`, 'warning');
             }
             this.filterAndRender();
+            this.renderRoute();
         } catch (err) {
             console.error(err);
             this.allRepos = [];
+            this.loaded = true;
             this.renderGrid([]);
-            this.errorProgress('Failed to load repositories');
             if (err instanceof GitHubApiError && err.rateLimited) {
                 this.setStatus(
-                    'GitHub API rate limit exceeded. Add a personal access token to increase your limit and try again.',
+                    'GitHub API rate limit exceeded. Please try again later.',
                     'error'
                 );
             } else {
-                this.setStatus(`Error loading repositories: ${err.message}`, 'error');
+                this.setStatus(`Error loading inspirations: ${err.message}`, 'error');
             }
         }
     }
 
-    updateProgress(loaded, total) {
-        const pct = total ? Math.min(100, Math.round((loaded / total) * 100)) : 0;
-        this.progressFillEl.style.width = `${pct}%`;
-        this.progressTextEl.textContent = total
-            ? `Loading repositories… ${loaded} / ${total}`
-            : `Loading repositories… ${loaded}`;
-        this.loadedCountEl.textContent = String(loaded);
-    }
-
-    completeProgress(total) {
-        this.progressFillEl.style.width = '100%';
-        this.progressFillEl.classList.add('complete');
-        this.progressTextEl.textContent = `Loaded ${total} repositories`;
-        this.loadedCountEl.textContent = String(total);
-    }
-
-    errorProgress(message) {
-        this.progressFillEl.classList.add('error');
-        this.progressTextEl.textContent = message;
-    }
-
+    // Status bar stays hidden unless there is an error/warning to show.
     setStatus(message, type = '') {
         this.statusMessageEl.textContent = message;
         this.statusMessageEl.className = '';
+        this.statusBarEl.classList.toggle('hidden', !message);
         if (type === 'success') this.statusMessageEl.classList.add('status-success');
         if (type === 'error') this.statusMessageEl.classList.add('status-error');
         if (type === 'warning') this.statusMessageEl.classList.add('status-warning');
@@ -2366,26 +2974,12 @@ class App {
             );
         }
 
-        list = this.sortRepos(list, this.sortMode);
-        this.repoCountEl.textContent = String(list.length);
+        list = this.sortRepos(list);
         this.renderGrid(list);
     }
 
-    sortRepos(list, mode) {
-        const copy = [...list];
-        switch (mode) {
-            case 'updated':
-                copy.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-                break;
-            case 'alpha':
-                copy.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-                break;
-            case 'stars':
-            default:
-                copy.sort((a, b) => b.stars - a.stars);
-                break;
-        }
-        return copy;
+    sortRepos(list) {
+        return [...list].sort((a, b) => b.stars - a.stars);
     }
 
     renderSkeletons(count) {
@@ -2473,14 +3067,15 @@ class App {
         }
 
         card.tabIndex = 0;
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', `Copy link to ${repo.owner}/${repo.name}`);
-        card.addEventListener('click', () => this.copyRepoUrl(repo, card));
+        card.setAttribute('role', 'link');
+        card.setAttribute('aria-label', `Open ${repo.owner}/${repo.name}`);
+        const openDetail = () => { location.hash = `#/${repo.owner}/${repo.name}`; };
+        card.addEventListener('click', openDetail);
         card.addEventListener('keydown', (e) => {
             if (e.target !== card) return;
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                this.copyRepoUrl(repo, card);
+                openDetail();
             }
         });
 
@@ -2530,33 +3125,285 @@ class App {
     }
 
     // ---------------------------------------------------------
-    // Copy-to-clipboard
+    // Routing
+    // '#/owner/repo' shows the dedicated Inspiration page;
+    // anything else shows the grid.
     // ---------------------------------------------------------
 
-    async copyRepoUrl(repo, card) {
-        try {
-            if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(repo.url);
-            } else {
-                this.legacyCopy(repo.url);
+    renderRoute() {
+        const match = location.hash.match(/^#\/([^/]+)\/(.+)$/);
+        const repo = match && this.allRepos.find(
+            (r) =>
+                r.owner.toLowerCase() === decodeURIComponent(match[1]).toLowerCase() &&
+                r.name.toLowerCase() === decodeURIComponent(match[2]).toLowerCase()
+        );
+
+        if (repo) {
+            this.gridEl.classList.add('hidden');
+            this.detailEl.classList.remove('hidden');
+            this.renderDetail(repo);
+            window.scrollTo(0, 0);
+        } else {
+            if (match && this.loaded) {
+                this.showToast('Inspiration not found');
+                history.replaceState(null, '', location.pathname + location.search);
             }
-            this.showToast('Copied!');
-            card.classList.add('copied');
-            setTimeout(() => card.classList.remove('copied'), 900);
-        } catch {
-            this.showToast('Could not copy link');
+            this.detailEl.classList.add('hidden');
+            this.detailEl.innerHTML = '';
+            this.gridEl.classList.remove('hidden');
         }
     }
 
-    legacyCopy(text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+    // ---------------------------------------------------------
+    // Detail (Inspiration) page
+    // ---------------------------------------------------------
+
+    renderDetail(repo) {
+        this.detailEl.innerHTML = '';
+
+        const back = document.createElement('button');
+        back.className = 'back-button';
+        back.textContent = '← All Inspirations';
+        back.addEventListener('click', () => {
+            history.replaceState(null, '', location.pathname + location.search);
+            this.renderRoute();
+        });
+
+        const hero = document.createElement('div');
+        hero.className = 'detail-hero';
+        this.loadHeroSvg(hero, repo);
+
+        const header = document.createElement('div');
+        header.className = 'detail-header';
+        const title = document.createElement('h1');
+        title.textContent = repo.name;
+        const owner = document.createElement('div');
+        owner.className = 'detail-owner';
+        owner.textContent = repo.owner;
+        header.append(title, owner);
+
+        const meta = document.createElement('div');
+        meta.className = 'detail-meta';
+        meta.innerHTML = `
+            <span>★ ${escapeHtml(formatCount(repo.stars))}</span>
+            <span>Updated ${escapeHtml(formatRelativeDate(repo.updatedAt))}</span>
+        `;
+
+        const desc = document.createElement('p');
+        desc.className = 'text-muted';
+        desc.textContent = repo.description || '';
+
+        const actions = document.createElement('div');
+        actions.className = 'detail-actions';
+
+        const createBtn = document.createElement('button');
+        createBtn.className = 'create-button';
+        createBtn.textContent = 'Create workspace from Inspiration';
+
+        const githubBtn = document.createElement('button');
+        githubBtn.className = 'secondary';
+        githubBtn.textContent = 'View on GitHub';
+        githubBtn.addEventListener('click', () => window.open(repo.url, '_blank', 'noopener'));
+
+        actions.append(createBtn, githubBtn);
+
+        createBtn.addEventListener('click', () => this.launchInMinds(repo));
+
+        const readmeSection = document.createElement('section');
+        readmeSection.className = 'readme-section';
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        readmeSection.appendChild(spinner);
+        this.loadReadme(readmeSection, repo);
+
+        this.detailEl.append(back, hero, header, meta, desc, actions, readmeSection);
+    }
+
+    async loadHeroSvg(hero, repo) {
+        let match = null;
+        try {
+            match = await this.client.findSvgFile(repo.owner, repo.name);
+        } catch {
+            match = null;
+        }
+        const showPlaceholder = () => {
+            hero.innerHTML = '';
+            const placeholder = document.createElement('div');
+            placeholder.className = 'repo-placeholder';
+            placeholder.innerHTML = createPlaceholderSvg(repo.name);
+            hero.appendChild(placeholder);
+        };
+        if (match?.download_url) {
+            const img = document.createElement('img');
+            img.alt = `${repo.name} preview`;
+            img.addEventListener('error', showPlaceholder, { once: true });
+            img.src = match.download_url;
+            hero.appendChild(img);
+        } else {
+            showPlaceholder();
+        }
+    }
+
+    async loadReadme(section, repo) {
+        let html = null;
+        let failed = false;
+        try {
+            html = await this.client.getReadmeHtml(repo.owner, repo.name);
+        } catch {
+            failed = true;
+        }
+        section.innerHTML = '';
+        const body = document.createElement('div');
+        body.className = 'readme-body';
+        if (html) {
+            // GitHub returns this HTML already sanitized/rendered.
+            body.innerHTML = html;
+        } else {
+            body.classList.add('text-muted', 'text-center');
+            body.textContent = failed
+                ? 'Could not load the README.'
+                : 'This Inspiration has no README.';
+        }
+        section.appendChild(body);
+    }
+
+    // ---------------------------------------------------------
+    // Open in Minds
+    // The animation plays here, then hands off to redirect.html,
+    // which fires the minds:// deeplink (imbue-ai/mngr#2565) and
+    // owns the not-installed fallback.
+    // ---------------------------------------------------------
+
+    async buildRedirectUrl(repo) {
+        const query = new URLSearchParams({
+            git_url: `${repo.url}.git`,
+            branch: repo.defaultBranch,
+            name: `${repo.owner}/${repo.name}`,
+        });
+        // Pass the inspiration's logo along so the redirect page can show it.
+        try {
+            const svg = await this.client.findSvgFile(repo.owner, repo.name);
+            if (svg?.download_url) query.set('logo', svg.download_url);
+        } catch { /* logo is optional */ }
+        return `redirect.html?${query}`;
+    }
+
+    launchInMinds(repo) {
+        if (this._launching) return;
+        this._launching = true;
+
+        const urlPromise = this.buildRedirectUrl(repo);
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.playMindsAnimation(reducedMotion, async () => {
+            window.location.href = await urlPromise;
+            this._launching = false;
+        });
+    }
+
+    // Phase timings: wave floods the screen (1.3s), the liquid drains
+    // into the bulb (1.4s), the bulb lights up, then the deeplink fires.
+    playMindsAnimation(skip, onLit) {
+        const overlay = this.overlayEl;
+        overlay.classList.add('active');
+
+        if (skip) {
+            overlay.classList.add('lit');
+            setTimeout(onLit, 400);
+            return;
+        }
+
+        overlay.classList.add('rising');
+        setTimeout(() => {
+            overlay.classList.remove('rising');
+            overlay.classList.add('draining');
+            this.runDrainAnimation(1400, () => {
+                overlay.classList.remove('draining');
+                overlay.classList.add('lit');
+                setTimeout(onLit, 550);
+            });
+        }, 1350);
+    }
+
+    // Draws the yellow flood as a liquid blob whose wobbly edge is a sum
+    // of drifting sine waves, contracting from the whole screen into the
+    // bulb. Redrawn every frame so the surface keeps sloshing as it flows.
+    runDrainAnimation(duration, onDone) {
+        const overlay = this.overlayEl;
+        const svg = overlay.querySelector('.drain-svg');
+        const path = overlay.querySelector('.drain-path');
+        const bulbRect = overlay.querySelector('.overlay-bulb').getBoundingClientRect();
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        // Aim for the neck of the bulb so the liquid appears to pour in.
+        const bx = bulbRect.left + bulbRect.width / 2;
+        const by = bulbRect.top + bulbRect.height * 0.45;
+
+        // Start with a radius that covers the farthest screen corner.
+        const maxRadius = Math.max(
+            Math.hypot(bx, by),
+            Math.hypot(width - bx, by),
+            Math.hypot(bx, height - by),
+            Math.hypot(width - bx, height - by)
+        ) + 250;   // margin exceeds the max wobble so the blob starts fully off-screen
+
+        const POINTS = 72;
+        const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+        const start = performance.now();
+
+        // rAF stops in hidden tabs; this backstop guarantees the launch
+        // still completes if the user switches away mid-animation.
+        let finished = false;
+        const finish = () => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(fallbackTimer);
+            onDone();
+        };
+        const fallbackTimer = setTimeout(finish, duration + 400);
+
+        const frame = (now) => {
+            if (finished || !overlay.classList.contains('draining')) return;
+
+            const t = Math.min(1, (now - start) / duration);
+            const radius = maxRadius * (1 - easeInOut(t));
+            const seconds = now / 1000;
+
+            // Wobble scales with the remaining radius so the blob settles
+            // as it reaches the bulb; three incommensurate sine bands keep
+            // the edge organic instead of periodic.
+            const wobble = Math.min(radius * 0.28, 26 + radius * 0.06);
+            const points = [];
+            for (let i = 0; i < POINTS; i++) {
+                const angle = (i / POINTS) * Math.PI * 2;
+                const r = radius
+                    + wobble * Math.sin(angle * 3 + seconds * 3.1)
+                    + wobble * 0.6 * Math.sin(angle * 5 - seconds * 4.3)
+                    + wobble * 0.35 * Math.sin(angle * 8 + seconds * 5.7);
+                points.push([bx + Math.cos(angle) * r, by + Math.sin(angle) * r]);
+            }
+
+            // Smooth closed Catmull-Rom-style curve through the points.
+            let d = '';
+            for (let i = 0; i < POINTS; i++) {
+                const [x0, y0] = points[i];
+                const [x1, y1] = points[(i + 1) % POINTS];
+                const mx = (x0 + x1) / 2;
+                const my = (y0 + y1) / 2;
+                d += i === 0 ? `M ${mx} ${my}` : ` Q ${x0} ${y0} ${mx} ${my}`;
+            }
+            path.setAttribute('d', d + ' Z');
+
+            if (t < 1) requestAnimationFrame(frame);
+            else finish();
+        };
+        requestAnimationFrame(frame);
+    }
+
+    hideMindsOverlay() {
+        this.overlayEl.classList.remove('active', 'rising', 'draining', 'lit');
     }
 
     showToast(message) {
